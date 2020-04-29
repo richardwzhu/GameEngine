@@ -34,5 +34,9 @@ public class Ball extends Actor {
             dy *= -1;
         }
         move(dx, dy);
+        
+        if(getIntersectingObjects(Paddle.class).size() > 0) {
+        	dy *= -1;
+        }
     }
 }
