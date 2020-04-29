@@ -12,6 +12,7 @@ public abstract class World extends Pane {
     private HashSet<KeyCode> codes;
 
     World() {
+        codes = new HashSet<KeyCode>();
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -44,7 +45,6 @@ public abstract class World extends Pane {
     }
     
     public boolean isKeyDown(KeyCode code) {
-    	//there is something wrong with this line of code, not sure what it is
     	return codes.contains(code);
     }
 
