@@ -18,7 +18,9 @@ public abstract class World extends Pane {
             public void handle(long now) {
                 act(now);
                 for (Node actor: getChildren()) {
-                    ((Actor)actor).act(now);
+                	if(actor instanceof Actor) {
+                		((Actor)actor).act(now);
+                	}
                 }
             }
         };

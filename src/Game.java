@@ -46,9 +46,15 @@ public class Game extends Application {
         paddle = new Paddle("paddle.png");
         paddle.setX(50);
         paddle.setY(50);
+        
+        Brick b = new Brick("brick.png");
+        b.setX(100);
+        b.setY(100);
+        
 
         ballWorld.add(ball);
         ballWorld.add(paddle);
+        ballWorld.add(b);
         ballWorld.start();
         stage.show();
         ballWorld.requestFocus();
