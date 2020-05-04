@@ -4,6 +4,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 import java.util.List;
 
@@ -17,10 +18,14 @@ public abstract class World extends Pane {
             @Override
             public void handle(long now) {
                 act(now);
-                for (Node actor: getChildren()) {
-                	if(actor instanceof Actor) {
-                		((Actor)actor).act(now);
-                	}
+                try {
+                    for (Node actor: getChildren()) {
+                        if(actor instanceof Actor) {
+                            ((Actor)actor).act(now);
+                        }
+                    }
+                } catch (ConcurrentModificationException e) {
+
                 }
             }
         };

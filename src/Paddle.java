@@ -5,19 +5,43 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 
 public class Paddle extends Actor{
+
+	public enum State{
+		LEFT, RIGHT, STILL
+	}
+	State state;
 	
-	public Paddle(String img) throws FileNotFoundException {
-		setImage(new Image(img));
+	public Paddle(String img) {
+		state = State.STILL;
+            setImage(new Image(img));
 	}
 
 	@Override
 	public void act(long now) {
 		if(getWorld().isKeyDown(KeyCode.LEFT)) {
-			move(-5, 0);
+		    if (this.getX()>0) {
+                move(-5, 0);
+            }
+			this.state = State.LEFT;
+
 		}
 		if(getWorld().isKeyDown(KeyCode.RIGHT)) {
-			move(5, 0);		
+            if (this.getX()+this.getWidth()/2<getWorld().getWidth()) {
+                move(5, 0);
+            }
+			this.state = State.RIGHT;
+
+		}
+		else {
+			this.state = State.STILL;
 		}
 	}
+
+	public State getState() {
+		return state;
+	}
+	public void setState(State state) {
+	    this.state = state;
+    }
 
 }

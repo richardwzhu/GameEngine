@@ -1,5 +1,6 @@
 import javafx.scene.image.Image;
 
+import javax.swing.plaf.nimbus.State;
 import java.awt.List;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 public class Ball extends Actor {
     private double dx;
     private double dy;
+    private boolean hitBall;
 
     public Ball(String img, double dx, double dy) throws FileNotFoundException {
         setImage(new Image(img));
@@ -33,9 +35,34 @@ public class Ball extends Actor {
         	cur.setScore(cur.getScore() - 1000);
         }
         move(dx, dy);
-        
-        if(getIntersectingObjects(Paddle.class).size() > 0) {
-        	dy *= -1;
+        if(getIntersectingObjects(Paddle.class).size() == 0) {
+            hitBall = false;
+        }
+        if(getIntersectingObjects(Paddle.class).size() > 0 && !hitBall) {
+            hitBall = true;
+
+            Paddle paddle = getIntersectingObjects(Paddle.class).get(0);
+
+            if (paddle.getState() == Paddle.State.STILL && paddle.getX() < this.getX() + this.getWidth() / 2 && paddle.getX() + paddle.getWidth() > this.getX() + this.getWidth() / 2) {
+                dy *= -1;
+            } else if (paddle.getX() + paddle.getWidth() / 3 < this.getX() + this.getWidth() / 2 && paddle.getX() + paddle.getWidth() * 2 / 3 > this.getX() + this.getWidth() / 2) {
+                dy *= -1;
+            } else if (paddle.getState() == Paddle.State.LEFT && paddle.getX() < this.getX() + this.getWidth() / 2 && paddle.getX() + paddle.getWidth() / 3 > this.getX() + this.getWidth() / 2) {
+                dx = -Math.abs(dx);
+            } else if (paddle.getState() == Paddle.State.RIGHT && paddle.getX() + paddle.getWidth() > this.getX() + this.getWidth() / 2 && paddle.getX() + paddle.getWidth() * 2 / 3 < this.getX() + this.getWidth() / 2) {
+                dx = Math.abs(dx);
+            } else if (paddle.getX()>this.getX()+this.getWidth()/2) {
+                dx = -6;
+            } else if (paddle.getX()+paddle.getWidth()<this.getX()+this.getWidth()/2) {
+                dx = 6;
+            }
+
+            else if (getIntersectingObjects(Paddle.class).get(0).getState() == Paddle.State.LEFT) {
+                if (getIntersectingObjects(Paddle.class).get(0).getX() + getIntersectingObjects(Paddle.class).get(0).getWidth() / 3 > this.getX() + this.getWidth() / 2) {
+                    //left third and moving left
+                }
+
+            }
         }
         
         if(getIntersectingObjects(Brick.class).size() > 0) {
