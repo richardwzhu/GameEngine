@@ -32,7 +32,7 @@ public class Game extends Application {
         MyKeyPressedListener p = new MyKeyPressedListener();
         ballWorld.setOnKeyPressed(p);
         MyKeyReleasedListener r = new MyKeyReleasedListener();
-        ballWorld.setOnKeyPressed(r);
+        ballWorld.setOnKeyReleased(r);
 
         border.setCenter(ballWorld);
 
@@ -50,8 +50,7 @@ public class Game extends Application {
         Brick b = new Brick("brick.png");
         b.setX(100);
         b.setY(100);
-        
-
+       
         ballWorld.add(ball);
         ballWorld.add(paddle);
         ballWorld.add(b);
