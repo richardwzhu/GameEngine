@@ -39,15 +39,15 @@ public class Game extends Application {
         Scene scene = new Scene(border);
         stage.setScene(scene);
 
-        ball = new Ball("ball.png", 2, 3);
+        ball = new Ball(getClass().getClassLoader().getResource("resources/ball.png").toString(), 2, 3);
         ball.setX(320);
         ball.setY(240);
         
-        paddle = new Paddle("paddle.png");
+        paddle = new Paddle(getClass().getClassLoader().getResource("resources/paddle.png").toString());
         paddle.setX(50);
         paddle.setY(50);
         
-        Brick b = new Brick("brick.png");
+        Brick b = new Brick(getClass().getClassLoader().getResource("resources/brick.png").toString());
         b.setX(100);
         b.setY(100);
        

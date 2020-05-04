@@ -9,13 +9,8 @@ public class Ball extends Actor {
     private double dx;
     private double dy;
 
-    public Ball(String img, double dx, double dy) {
-        try {
-            setImage(new Image(new FileInputStream(img)));
-        }
-        catch (FileNotFoundException e) {
-            System.out.println(e);
-        }
+    public Ball(String img, double dx, double dy) throws FileNotFoundException {
+        setImage(new Image(img));
         this.dx = dx;
         this.dy = dy;
     }
