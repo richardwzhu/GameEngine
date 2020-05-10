@@ -1,5 +1,7 @@
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.paint.Color;
+
 
 public class Score extends Text{
 	private int score;
@@ -7,6 +9,7 @@ public class Score extends Text{
 	public Score() {
 		score = 0;
 		setFont(new Font(20));
+		setFill(Color.CORNFLOWERBLUE);
 		updateDisplay();
 	}
 	
