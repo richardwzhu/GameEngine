@@ -7,7 +7,7 @@ public class Lives extends Text{
 	private int lives;
 
 	public Lives() {
-		lives = 3;
+		lives = 4;
 		setFont(new Font(20));
 		setFill(Color.RED);
 		updateDisplay();
