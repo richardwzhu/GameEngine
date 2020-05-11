@@ -22,6 +22,10 @@ public class Game extends Application {
 	private BallWorld ballWorld;
 	private Ball ball;
 	private Paddle paddle;
+	private Scene scene1;
+	private Scene scene2;
+	private Scene instruction_scene1;
+	private Scene gameover_scene1;
 	
     public static void main(String[] args) {
         launch();
@@ -55,9 +59,23 @@ public class Game extends Application {
         Button button = new Button("Play");
         button.setEffect(dropShadow);
         button.setPrefSize(400, 100);
+        button.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+            	stage.setScene(scene2);
+            	ballWorld.start();
+            }
+        });
+        
         Button button2 = new Button("Instructions");
         button2.setPrefSize(400, 100);
         button2.setEffect(dropShadow);
+        button2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+            	stage.setScene(instruction_scene1);
+            }
+        });
 
         button.setStyle("-fx-border-color: #0000ff; -fx-border-width: 10px; -fx-font-size: 4em;-fx-background-color: #6495ed;-fx-text-fill: #0000ff");
         button2.setStyle("-fx-border-color: #0000ff; -fx-border-width: 10px; -fx-font-size: 4em;-fx-background-color: #6495ed;-fx-text-fill: #0000ff");
@@ -79,7 +97,7 @@ public class Game extends Application {
         centerTop.setAlignment(Pos.CENTER);
         titleScreen.setTop(centerTop);
 
-        Scene scene1 = new Scene(titleScreen);
+        scene1 = new Scene(titleScreen);
         stage.setScene(scene1);
 
         rt.setNode(text);
@@ -102,6 +120,12 @@ public class Game extends Application {
         Button instruction_button2 = new Button("Return to Main Menu");
         instruction_button2.setPrefSize(200, 50);
         instruction_button2.setEffect(dropShadow);
+        instruction_button2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+            	stage.setScene(scene1);
+            }
+        });
 
         instruction_button2.setStyle("-fx-border-color: #0000ff; -fx-border-width: 5px; -fx-font-size: 1em;-fx-background-color: #6495ed;-fx-text-fill: #0000ff");
 
@@ -128,7 +152,7 @@ public class Game extends Application {
         instruction_centerTop.setAlignment(Pos.CENTER);
         instruction.setTop(instruction_centerTop);
 
-        Scene instruction_scene1 = new Scene(instruction);
+        instruction_scene1 = new Scene(instruction);
         //stage.setScene(instruction_scene1);
 
         rt.setNode(instruction_text);
@@ -150,9 +174,8 @@ public class Game extends Application {
         ballWorld.setOnKeyPressed(p);
         MyKeyReleasedListener r = new MyKeyReleasedListener();
         ballWorld.setOnKeyReleased(r);
-
         border.setCenter(ballWorld);
-
+        
 
 
         ball = new Ball(getClass().getClassLoader().getResource("resources/ball.png").toString(), 2, 2);
@@ -192,10 +215,10 @@ public class Game extends Application {
 
         ballWorld.add(ball);
         ballWorld.add(paddle);
-        ballWorld.start();
+        //ballWorld.start();
         ballWorld.requestFocus();
 
-        Scene scene2 = new Scene(border);
+        scene2 = new Scene(border);
         //stage.setScene(scene2);
 
 
@@ -246,8 +269,8 @@ public class Game extends Application {
         gameover_centerTop.setAlignment(Pos.CENTER);
         gameover_titleScreen.setTop(gameover_centerTop);
 
-        Scene gameover_scene1 = new Scene(gameover_titleScreen);
-        stage.setScene(gameover_scene1);
+        gameover_scene1 = new Scene(gameover_titleScreen);
+        //stage.setScene(gameover_scene1);
 
 
 
