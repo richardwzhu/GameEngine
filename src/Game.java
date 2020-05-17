@@ -1,8 +1,10 @@
+import javafx.animation.AnimationTimer;
 import javafx.animation.RotateTransition;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
@@ -10,9 +12,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
@@ -22,85 +22,94 @@ public class Game extends Application {
 	private BallWorld ballWorld;
 	private Ball ball;
 	private Paddle paddle;
-	private Scene scene1;
-	private Scene scene2;
-	private Scene instruction_scene1;
-	private Scene gameover_scene1;
-	
+	private Scene titleScene;
+	private Scene gameScene;
+	private Scene instructionScene;
+	private Scene gameOverScene;
+	private RotateTransition rt;
+	private String state = "MainMenu";
     public static void main(String[] args) {
         launch();
     }
 
+
     @Override
     public void start(Stage stage) throws Exception {
-
-        RotateTransition rt = new RotateTransition();
+        //UI Stuff
+        rt = new RotateTransition();
         rt.setDuration(Duration.seconds(2));
         rt.setByAngle(360);
+        DropShadow dropShadow = new DropShadow(10, 10, 10, Color.GRAY);
 
-        // Play it (after showing the Stage)
-
-
-
+        //Setting window up
         stage.setTitle("BallWorld");
         stage.setResizable(false);
         stage.setWidth(665);
         stage.setHeight(480);
 
-        DropShadow dropShadow = new DropShadow(10, 10, 10, Color.GRAY);
 
 
-        //title screen stuff
-        BorderPane titleScreen = new BorderPane();
-        Text text = new Text("Breakout!");
-        text.setEffect(dropShadow);
-        text.setFont(Font.font("impact", FontWeight.BOLD, FontPosture.ITALIC, 100));
+        ballWorld = new BallWorld(stage, titleScene, gameOverScene);
 
-        Button button = new Button("Play");
-        button.setEffect(dropShadow);
-        button.setPrefSize(400, 100);
-        button.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+        //Intro screen
+
+        //Creating a group for all of the intro screen elements
+        Group titleScreen = new Group();
+
+        //creating title text
+        Text breakoutText = new Text("Breakout!");
+        breakoutText.setEffect(dropShadow);
+        breakoutText.setFont(Font.font("impact", FontWeight.BOLD, FontPosture.ITALIC, 100));
+
+        //Creating title buttons
+        Button playButton = new Button("Play");
+        playButton.setEffect(dropShadow);
+        playButton.setPrefSize(400, 100);
+        playButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
-            	stage.setScene(scene2);
+            	stage.setScene(gameScene);
             	ballWorld.start();
+                ballWorld.requestFocus();
+                stage.show();
             }
         });
         
-        Button button2 = new Button("Instructions");
-        button2.setPrefSize(400, 100);
-        button2.setEffect(dropShadow);
-        button2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        Button instructionButton = new Button("Instructions");
+        instructionButton.setPrefSize(400, 100);
+        instructionButton.setEffect(dropShadow);
+        instructionButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
-            	stage.setScene(instruction_scene1);
+            	stage.setScene(instructionScene);
+            	rt.playFromStart();
+            	stage.show();
             }
         });
 
-        button.setStyle("-fx-border-color: #0000ff; -fx-border-width: 10px; -fx-font-size: 4em;-fx-background-color: #6495ed;-fx-text-fill: #0000ff");
-        button2.setStyle("-fx-border-color: #0000ff; -fx-border-width: 10px; -fx-font-size: 4em;-fx-background-color: #6495ed;-fx-text-fill: #0000ff");
+        playButton.setStyle("-fx-border-color: #0000ff; -fx-border-width: 10px; -fx-font-size: 4em;-fx-background-color: #6495ed;-fx-text-fill: #0000ff");
+        instructionButton.setStyle("-fx-border-color: #0000ff; -fx-border-width: 10px; -fx-font-size: 4em;-fx-background-color: #6495ed;-fx-text-fill: #0000ff");
 
-        VBox center = new VBox();
-        titleScreen.setCenter(center);
-        Separator separator1 = new Separator();
-        separator1.setOrientation(Orientation.VERTICAL);
-        separator1.setMaxWidth(100);
-        center.getChildren().add(button);
-        center.getChildren().add(separator1);
-        center.getChildren().add(button2);
+        //Set positions
+        breakoutText.setLayoutX(120);
+        breakoutText.setLayoutY(100);
+        playButton.setLayoutX(120);
+        playButton.setLayoutY(160);
+        instructionButton.setLayoutX(120);
+        instructionButton.setLayoutY(300);
 
-        center.setAlignment(Pos.CENTER);
+        titleScreen.getChildren().add(breakoutText);
+        titleScreen.getChildren().add(playButton);
+        titleScreen.getChildren().add(instructionButton);
 
-        HBox centerTop = new HBox();
-        centerTop.getChildren().add(text);
+        titleScene = new Scene(titleScreen);
+        stage.setScene(titleScene);
 
-        centerTop.setAlignment(Pos.CENTER);
-        titleScreen.setTop(centerTop);
+        rt.setNode(breakoutText);
 
-        scene1 = new Scene(titleScreen);
-        stage.setScene(scene1);
-
-        rt.setNode(text);
+        rt.playFromStart();
+        stage.show();
 
 
 
@@ -108,65 +117,58 @@ public class Game extends Application {
 
 
 
+        //Instruction Screen stuff
+        Group instructionScreen = new Group();
 
+        //Create Instruction Title Text
+        Text instructionText = new Text("Instructions!");
+        instructionText.setEffect(dropShadow);
+        instructionText.setFont(Font.font("impact", FontWeight.BOLD, FontPosture.ITALIC, 100));
 
-        //instruction screen stuff
-        BorderPane instruction = new BorderPane();
-        Text instruction_text = new Text("Instructions!");
-        instruction_text.setEffect(dropShadow);
-
-        instruction_text.setFont(Font.font("impact", FontWeight.BOLD, FontPosture.ITALIC, 100));
-
-        Button instruction_button2 = new Button("Return to Main Menu");
-        instruction_button2.setPrefSize(200, 50);
-        instruction_button2.setEffect(dropShadow);
-        instruction_button2.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        //Create Buttons
+        Button instructionReturnButton = new Button("Return to Main Menu");
+        instructionReturnButton.setPrefSize(200, 50);
+        instructionReturnButton.setEffect(dropShadow);
+        instructionReturnButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
-            	stage.setScene(scene1);
+                stage.setScene(titleScene);
+                stage.show();
+                rt.playFromStart();
             }
         });
 
-        instruction_button2.setStyle("-fx-border-color: #0000ff; -fx-border-width: 5px; -fx-font-size: 1em;-fx-background-color: #6495ed;-fx-text-fill: #0000ff");
+        instructionReturnButton.setStyle("-fx-border-color: #0000ff; -fx-border-width: 5px; -fx-font-size: 1em;-fx-background-color: #6495ed;-fx-text-fill: #0000ff");
 
-        Text instruction_message = new Text();
-        instruction_message.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.ITALIC, 10));
-        instruction_message.setText("Use the cursor or arrow keys to move the paddle left and right to bounce the ball.\n" +
-                "When the ball hits a brick, the brick is removed and you gain 100 points.\n" +
+        //Create instruction message
+
+        Text instructionMessage = new Text();
+        instructionMessage.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.ITALIC, 10));
+        instructionMessage.setText("             Use the cursor or arrow keys to move the paddle left and right to bounce the ball.\n" +
+                "                    When the ball hits a brick, the brick is removed and you gain 100 points.\n" +
                 "If the ball hits the bottom of the screen, you lose 1000 points and 1 life. You have 3 lives in total");
-        instruction_message.setTextAlignment(TextAlignment.CENTER);
-        VBox instruction_center = new VBox();
-        instruction.setCenter(instruction_center);
-        Separator instruction_separator1 = new Separator();
-        instruction_separator1.setOrientation(Orientation.VERTICAL);
-        instruction_separator1.setMinHeight(100);
-        instruction_center.getChildren().add(instruction_message);
-        instruction_center.getChildren().add(instruction_separator1);
-        instruction_center.getChildren().add(instruction_button2);
 
-        instruction_center.setAlignment(Pos.TOP_CENTER);
+        //Position elements and add them
+        instructionText.setLayoutX(60);
+        instructionText.setLayoutY(100);
 
-        HBox instruction_centerTop = new HBox();
-        instruction_centerTop.getChildren().add(instruction_text);
+        instructionMessage.setLayoutX(60);
+        instructionMessage.setLayoutY(160);
 
-        instruction_centerTop.setAlignment(Pos.CENTER);
-        instruction.setTop(instruction_centerTop);
+        instructionReturnButton.setLayoutX(230);
+        instructionReturnButton.setLayoutY(200);
 
-        instruction_scene1 = new Scene(instruction);
-        //stage.setScene(instruction_scene1);
+        instructionScreen.getChildren().add(instructionText);
+        instructionScreen.getChildren().add(instructionMessage);
+        instructionScreen.getChildren().add(instructionReturnButton);
 
-        rt.setNode(instruction_text);
+        instructionScene = new Scene(instructionScreen);
 
-
-
-
+        rt.setNode(instructionText);
 
 
         //ball world stuff
-
-        BorderPane border = new BorderPane();
-
-        ballWorld = new BallWorld();
+        BorderPane ballWorldScene = new BorderPane();
 
         MyWorldMouseListener m = new MyWorldMouseListener();
         ballWorld.setOnMouseMoved(m);
@@ -174,8 +176,8 @@ public class Game extends Application {
         ballWorld.setOnKeyPressed(p);
         MyKeyReleasedListener r = new MyKeyReleasedListener();
         ballWorld.setOnKeyReleased(r);
-        border.setCenter(ballWorld);
-        
+        ballWorldScene.setCenter(ballWorld);
+
 
 
         ball = new Ball(getClass().getClassLoader().getResource("resources/ball.png").toString(), 2, 2);
@@ -186,106 +188,114 @@ public class Game extends Application {
         paddle.setX(50);
         paddle.setY(380);
 
-        for (int y = 80; y<160; y+=30) {
-            for (int x = 0; x < 11; x++) {
-                Brick b = new Brick(getClass().getClassLoader().getResource("resources/brick.png").toString());
-                b.setX(x * 60);
-                b.setY(y);
-                ballWorld.add(b);
-
-                Brick b2 = new Brick(getClass().getClassLoader().getResource("resources/brick2.png").toString());
-                b2.setX(x * 60 + 30);
-                b2.setY(y);
-                ballWorld.add(b2);
-            }
-            for (int x = 0; x < 11; x++) {
-
-                Brick b2 = new Brick(getClass().getClassLoader().getResource("resources/brick.png").toString());
-                b2.setX(x * 60 + 30);
-                b2.setY(y+15);
-                ballWorld.add(b2);
-
-                Brick b = new Brick(getClass().getClassLoader().getResource("resources/brick2.png").toString());
-                b.setX(x * 60);
-                b.setY(y+15);
-                ballWorld.add(b);
-            }
-        }
+        //Create bricks
+        ballWorld.addBricks();
 
 
         ballWorld.add(ball);
         ballWorld.add(paddle);
-        //ballWorld.start();
-        ballWorld.requestFocus();
-
-        scene2 = new Scene(border);
-        //stage.setScene(scene2);
-
-
+        gameScene = new Scene(ballWorldScene);
 
 
 
 
         //game over scene
-        BorderPane gameover_titleScreen = new BorderPane();
-        Text gameover_text = new Text("Game Over!");
-        gameover_text.setEffect(dropShadow);
-        gameover_text.setFont(Font.font("impact", FontWeight.BOLD, FontPosture.ITALIC, 100));
+        //Set up scene
+        Group gameOverScreen = new Group();
+
+        //Create UI elements
+        Text gameOverText = new Text("Game Over!");
+        gameOverText.setEffect(dropShadow);
+        gameOverText.setFont(Font.font("impact", FontWeight.BOLD, FontPosture.ITALIC, 100));
+
+        Text scoreText = new Text("Your Score Was " + ballWorld.getScore().getScore()+ "!");
+        scoreText.setEffect(dropShadow);
+        scoreText.setFont(Font.font("impact", FontWeight.BOLD, FontPosture.ITALIC, 30));
 
 
 
-        Text score_text = new Text("Your Score Was " + ballWorld.getScore().getScore()+ "!");
-        score_text.setEffect(dropShadow);
-        score_text.setFont(Font.font("impact", FontWeight.BOLD, FontPosture.ITALIC, 30));
+        Button replayButton = new Button("Replay");
+        replayButton.setEffect(dropShadow);
+        replayButton.setPrefSize(400, 100);
+        replayButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                stage.setScene(gameScene);
+                ballWorld.reset();
+                stage.show();
+
+            }
+        });
+        Button mainMenuButton = new Button("Main Menu");
+        mainMenuButton.setPrefSize(400, 100);
+        mainMenuButton.setEffect(dropShadow);
+        mainMenuButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                stage.setScene(titleScene);
+                ballWorld.reset();
+                stage.show();
+                rt.playFromStart();
+            }
+        });
+
+        replayButton.setStyle("-fx-border-color: #0000ff; -fx-border-width: 10px; -fx-font-size: 4em;-fx-background-color: #6495ed;-fx-text-fill: #0000ff");
+        mainMenuButton.setStyle("-fx-border-color: #0000ff; -fx-border-width: 10px; -fx-font-size: 4em;-fx-background-color: #6495ed;-fx-text-fill: #0000ff");
 
 
 
-        Button gameover_button = new Button("Replay");
-        gameover_button.setEffect(dropShadow);
-        gameover_button.setPrefSize(400, 100);
-        Button gameover_button2 = new Button("Main Menu");
-        gameover_button2.setPrefSize(400, 100);
-        gameover_button2.setEffect(dropShadow);
+        gameOverScreen.getChildren().add(scoreText);
+        gameOverScreen.getChildren().add(replayButton);
+        gameOverScreen.getChildren().add(mainMenuButton);
+        gameOverScreen.getChildren().add(gameOverText);
 
-        gameover_button.setStyle("-fx-border-color: #0000ff; -fx-border-width: 10px; -fx-font-size: 4em;-fx-background-color: #6495ed;-fx-text-fill: #0000ff");
-        gameover_button2.setStyle("-fx-border-color: #0000ff; -fx-border-width: 10px; -fx-font-size: 4em;-fx-background-color: #6495ed;-fx-text-fill: #0000ff");
+        gameOverText.setLayoutX(100);
+        gameOverText.setLayoutY(100);
+        scoreText.setLayoutX(200);
+        scoreText.setLayoutY(160);
+        replayButton.setLayoutX(120);
+        replayButton.setLayoutY(200);
+        mainMenuButton.setLayoutX(120);
+        mainMenuButton.setLayoutY(320);
 
-        VBox gameover_center = new VBox();
-        gameover_titleScreen.setCenter(gameover_center);
-        Separator gameover_separator1 = new Separator();
-        gameover_separator1.setOrientation(Orientation.VERTICAL);
-        gameover_separator1.setMaxWidth(100);
-        gameover_center.getChildren().add(score_text);
-        gameover_center.getChildren().add(gameover_button);
-        gameover_center.getChildren().add(gameover_separator1);
-        gameover_center.getChildren().add(gameover_button2);
-
-        gameover_center.setAlignment(Pos.CENTER);
-
-        HBox gameover_centerTop = new HBox();
-        gameover_centerTop.getChildren().add(gameover_text);
-
-
-        gameover_centerTop.setAlignment(Pos.CENTER);
-        gameover_titleScreen.setTop(gameover_centerTop);
-
-        gameover_scene1 = new Scene(gameover_titleScreen);
-        //stage.setScene(gameover_scene1);
+        gameOverScene = new Scene(gameOverScreen);
 
 
 
-        rt.setNode(gameover_text);
+        rt.setNode(gameOverText);
+
+        AnimationTimer mainLoop = new AnimationTimer() {
+
+            @Override
+            public void handle(long now) {
+                if (stage.getScene() == (gameScene)) {
+                    if (ballWorld.isGameOver()) {
+                        stage.setScene(gameOverScene);
+                        stage.show();
+                        scoreText.setText("Your Score Was " + ballWorld.getScore().getScore()+ "!");
+                        rt.playFromStart();
+                    }
+                    if (ballWorld.isLevelCleared()) {
+                        ballWorld.addBricks();
+                    }
+                }
+            }
+
+        };
+        mainLoop.start();
 
 
-        stage.show();
-        rt.play();
+
+
     }
     
     class MyWorldMouseListener implements EventHandler<MouseEvent> {
         double previousPaddlePos = 0;
     	@Override
     	public void handle(MouseEvent event) {
-    		paddle.setX(event.getX());
+    	    if (event.getX()<600) {
+                paddle.setX(event.getX());
+            }
     		if (previousPaddlePos - paddle.getX() < 0) {
     		    paddle.setState(Paddle.State.RIGHT);
             }

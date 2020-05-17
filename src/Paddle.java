@@ -26,7 +26,7 @@ public class Paddle extends Actor{
 
 		}
 		if(getWorld().isKeyDown(KeyCode.RIGHT)) {
-            if (this.getX()+this.getWidth()/2<getWorld().getWidth()) {
+            if (this.getX()+this.getWidth()<655) {
                 move(5, 0);
             }
 			this.state = State.RIGHT;

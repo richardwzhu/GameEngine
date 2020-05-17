@@ -7,7 +7,7 @@ public class Lives extends Text{
 	private int lives;
 
 	public Lives() {
-		lives = 4;
+		lives = 3;
 		setFont(new Font(20));
 		setFill(Color.RED);
 		updateDisplay();
@@ -16,7 +16,8 @@ public class Lives extends Text{
 	public void updateDisplay() {
 		String txt = "";
 		for (int i = 0; i < lives; i++) {
-			txt+="\uD83D\uDC93";
+			txt+="❤";
+
 		}
 		setText(txt);
 	}

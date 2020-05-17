@@ -7,7 +7,7 @@ public class Score extends Text{
 	private int score;
 	
 	public Score() {
-		score = 1000;
+		score = 0;
 		setFont(new Font(20));
 		setFill(Color.CORNFLOWERBLUE);
 		updateDisplay();

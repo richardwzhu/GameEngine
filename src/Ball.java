@@ -27,10 +27,10 @@ public class Ball extends Actor {
             dy *= -1;
         }
 
-        if (getX()+getWidth() > getWorld().getWidth()) {
+        if (getX()+getWidth() > 665) {
             dx *= -1;
         }
-        if (getY()+getHeight() > getWorld().getHeight()) {
+        if (getY()+getHeight() > 455) {
             dy *= -1;
             Score cur = ((BallWorld)getWorld()).getScore();
         	cur.setScore(cur.getScore() - 1000);
@@ -53,10 +53,10 @@ public class Ball extends Actor {
             } else if (paddle.getX() + paddle.getWidth() / 3 < this.getX() + this.getWidth() / 2 && paddle.getX() + paddle.getWidth() * 2 / 3 > this.getX() + this.getWidth() / 2) {
                 dy *= -1;
             } else if (paddle.getState() == Paddle.State.LEFT && paddle.getX() < this.getX() + this.getWidth() / 2 && paddle.getX() + paddle.getWidth() / 3 > this.getX() + this.getWidth() / 2) {
-                dx = -Math.abs(dx);
+                dx = -2;
                 dy*=-1;
             } else if (paddle.getState() == Paddle.State.RIGHT && paddle.getX() + paddle.getWidth() > this.getX() + this.getWidth() / 2 && paddle.getX() + paddle.getWidth() * 2 / 3 < this.getX() + this.getWidth() / 2) {
-                dx = Math.abs(dx);
+                dx = 2;
                 dy*=-1;
             } else if (paddle.getX()>this.getX()+this.getWidth()/2) {
                 dx = -3;
