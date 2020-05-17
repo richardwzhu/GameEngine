@@ -1,4 +1,6 @@
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import javax.management.DynamicMBean;
 import javax.swing.plaf.nimbus.State;
@@ -13,6 +15,9 @@ public class Ball extends Actor {
     private boolean hitBall;
 
     public Ball(String img, double dx, double dy) throws FileNotFoundException {
+    	ImageView imageView = new ImageView(img);
+		imageView.setPreserveRatio(true);
+		imageView.setEffect(new Glow());
         setImage(new Image(img));
         this.dx = dx;
         this.dy = dy;

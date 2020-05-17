@@ -1,7 +1,9 @@
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
 public class Paddle extends Actor{
@@ -13,7 +15,10 @@ public class Paddle extends Actor{
 	
 	public Paddle(String img) {
 		state = State.STILL;
-            setImage(new Image(img));
+		ImageView imageView = new ImageView(img);
+		imageView.setPreserveRatio(true);
+		imageView.setEffect(new Glow());
+        setImage(new Image(img));
 	}
 
 	@Override

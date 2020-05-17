@@ -9,6 +9,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.effect.Glow;
+import javafx.scene.effect.Light;
+import javafx.scene.effect.Lighting;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -40,6 +44,12 @@ public class Game extends Application {
         rt.setDuration(Duration.seconds(2));
         rt.setByAngle(360);
         DropShadow dropShadow = new DropShadow(10, 10, 10, Color.GRAY);
+        Light.Distant light = new Light.Distant();
+		light.setAzimuth(-135.0);
+		Lighting lighting = new Lighting();
+		lighting.setLight(light);
+		lighting.setSurfaceScale(5.0);
+		dropShadow.setInput(lighting);
 
         //Setting window up
         stage.setTitle("BallWorld");
@@ -59,7 +69,7 @@ public class Game extends Application {
 
         //creating title text
         Text breakoutText = new Text("Breakout!");
-        breakoutText.setEffect(dropShadow);
+		breakoutText.setEffect(dropShadow);
         breakoutText.setFont(Font.font("impact", FontWeight.BOLD, FontPosture.ITALIC, 100));
 
         //Creating title buttons
@@ -205,6 +215,7 @@ public class Game extends Application {
 
         //Create UI elements
         Text gameOverText = new Text("Game Over!");
+		dropShadow.setInput(lighting);
         gameOverText.setEffect(dropShadow);
         gameOverText.setFont(Font.font("impact", FontWeight.BOLD, FontPosture.ITALIC, 100));
 

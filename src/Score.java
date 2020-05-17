@@ -1,5 +1,8 @@
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.effect.Light;
+import javafx.scene.effect.Lighting;
 import javafx.scene.paint.Color;
 
 
@@ -8,8 +11,14 @@ public class Score extends Text{
 	
 	public Score() {
 		score = 0;
-		setFont(new Font(20));
+		setFont(Font.font(null, FontWeight.BOLD, 20));
 		setFill(Color.CORNFLOWERBLUE);
+		Light.Distant light = new Light.Distant();
+		light.setAzimuth(-135.0);
+		Lighting lighting = new Lighting();
+		lighting.setLight(light);
+		lighting.setSurfaceScale(5.0);
+		setEffect(lighting);
 		updateDisplay();
 	}
 	
